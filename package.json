@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "a": "json-schema-to-ts"
   },
   "dependencies": {
     "@heroui/accordion": "2.2.23",
@@ -79,7 +80,7 @@
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-unused-imports": "4.1.4",
     "globals": "16.0.0",
-    "json-schema-to-ts": "^3.1.1",
+    "json-schema-to-typescript": "^15.0.4",
     "postcss": "8.5.6",
     "prettier": "3.5.3",
     "tailwind-variants": "3.1.1",
