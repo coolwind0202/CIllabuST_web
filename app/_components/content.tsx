@@ -4,23 +4,23 @@ import { Input } from "@heroui/input";
 import { Syllabus } from "@/app/syllabus";
 import z from "zod";
 import { useFuse } from "../_hooks/use_fuse";
-import { useState } from "react";
 //@ts-ignore
 import Highlighter from "react-highlight-words";
+import { useQueryState } from "nuqs";
 
 export type Props = {
   syllabus: z.infer<typeof Syllabus>
 };
 
 export function Content({ syllabus }: Props) {
-  const [word, setWord] = useState("");
+  const [word, setWord] = useQueryState("word");
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWord(event.target.value);
   };
 
   const { search } = useFuse(syllabus.subjects,
     { keys: ["summary", "name", "cources", "goal"], threshold: 0.1, ignoreLocation: true, includeMatches: true });
-  const searchResult = search(word);
+  const searchResult = search(word ?? "");
 
   return (
     <div className="p-8 flex flex-col gap-6">
@@ -28,6 +28,7 @@ export function Content({ syllabus }: Props) {
         <Input
           placeholder="例: 光エレクトロニクス"
           label="検索ワード"
+          value={word ?? ""}
           onChange={handleSearchChange}
         />
       </section>
