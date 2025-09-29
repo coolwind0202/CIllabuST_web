@@ -5,6 +5,8 @@ import { Syllabus } from "@/app/syllabus";
 import z from "zod";
 import { useFuse } from "../_hooks/use_fuse";
 import { useState } from "react";
+//@ts-ignore
+import Highlighter from "react-highlight-words";
 
 export type Props = {
   syllabus: z.infer<typeof Syllabus>
@@ -17,7 +19,7 @@ export function Content({ syllabus }: Props) {
   };
 
   const { search } = useFuse(syllabus.subjects,
-    { keys: ["summary", "name", "cources", "goal"], threshold: 0.1, ignoreLocation: true });
+    { keys: ["summary", "name", "cources", "goal"], threshold: 0.1, ignoreLocation: true, includeMatches: true });
   const searchResult = search(word);
 
   return (
@@ -32,10 +34,24 @@ export function Content({ syllabus }: Props) {
       <ul className="flex flex-col gap-6">
         {searchResult.map((entry) => {
           const subject = entry.item;
+          const matches = entry.matches ?? [];
+
           return (
             <li key={`${subject.category}_${subject.name}`}>
               <h1 className="font-bold text-2xl">{subject.name}</h1>
-              <p>{subject.summary}</p>
+              <p>
+                {
+                  /* Fuse can generate multiple same match objects, so we should use index as key. */
+                  matches.map((match, i) => (
+                    <Highlighter
+                      key={i}
+                      highlightStyle={{ backgroundColor: "darkslateblue", color: "white" }}
+                      textToHighlight={match.value}
+                      searchWords={[]}
+                      findChunks={() => match.indices.map(range => ({ start: range[0], end: range[1] + 1 }))} />
+                  ))
+                }
+              </p>
             </li>
           )
         })
