@@ -39,7 +39,7 @@ export function Content({ syllabus }: Props) {
           return (
             <li key={`${subject.category}_${subject.name}`}>
               <h1 className="font-bold text-2xl">{subject.name}</h1>
-              <p>
+              <p className="text-gray-400">
                 {
                   /* Fuse can generate multiple same match objects, so we should use index as key. */
                   matches.map((match, i) => (
