@@ -16,7 +16,8 @@ export function Content({ syllabus }: Props) {
     setWord(event.target.value);
   };
 
-  const { search } = useFuse(syllabus.subjects, { keys: ["name", "summary"] });
+  const { search } = useFuse(syllabus.subjects,
+    { keys: ["summary", "name", "cources", "goal"], threshold: 0.1, ignoreLocation: true });
   const searchResult = search(word);
 
   return (
