@@ -1,15 +1,16 @@
 "use client";
 
 import { Input } from "@heroui/input";
-import { Syllabus } from "@/app/syllabus";
-import z from "zod";
+import { Button } from "@heroui/button";
 import { useFuse } from "../_hooks/use_fuse";
 //@ts-ignore
 import Highlighter from "react-highlight-words";
 import { useQueryState } from "nuqs";
+import { Syllabus } from "../_types/syllabus";
+import { getCategoryText } from "./category";
 
 export type Props = {
-  syllabus: z.infer<typeof Syllabus>
+  syllabus: Syllabus
 };
 
 export function Content({ syllabus }: Props) {
@@ -39,7 +40,10 @@ export function Content({ syllabus }: Props) {
 
           return (
             <li key={`${subject.category}_${subject.name}`}>
-              <h1 className="font-bold text-2xl">{subject.name}</h1>
+              <div className="flex gap-3 mb-1">
+                <h1 className="font-bold text-2xl">{subject.name}</h1>
+                <Button radius="sm" size="sm" variant="bordered">{getCategoryText(subject.category)}</Button>
+              </div>
               <p className="text-gray-400">
                 {
                   /* Fuse can generate multiple same match objects, so we should use index as key. */
