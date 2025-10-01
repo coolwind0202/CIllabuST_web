@@ -2,7 +2,6 @@
 
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
-
 //@ts-ignore
 import Highlighter from "react-highlight-words";
 import { useQueryState } from "nuqs";
