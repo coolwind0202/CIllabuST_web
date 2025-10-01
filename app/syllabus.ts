@@ -1,3 +1,44 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export const Syllabus = z.object({ "subjects": z.array(z.object({ "name": z.string(), "school_year": z.number().int(), "requisite": z.enum(["require","require_elective","elective"]), "category": z.enum(["general","pe","fl","chembio","photon","infosys","teacher","unknown"]), "is_CAP_target": z.boolean(), "lecture_type": z.string(), "credits": z.number().int(), "teacher_names": z.array(z.string()), "credit_manager": z.string(), "summary": z.string(), "goal": z.string(), "evaluation_items": z.array(z.object({ "title": z.string(), "point": z.number().int(), "way": z.string() })), "cources": z.array(z.string()), "self_study": z.string(), "textbook": z.string(), "reference": z.string(), "evaluation_events": z.array(z.object({ "title": z.string(), "point": z.number().int() })), "evaluation_criterion": z.string(), "additional_information": z.string() })) })
+export const Syllabus = z.object({
+  subjects: z.array(
+    z.object({
+      name: z.string(),
+      school_year: z.number().int(),
+      requisite: z.enum(["require", "require_elective", "elective"]),
+      category: z.enum([
+        "general",
+        "pe",
+        "fl",
+        "chembio",
+        "photon",
+        "infosys",
+        "teacher",
+        "unknown",
+      ]),
+      is_CAP_target: z.boolean(),
+      lecture_type: z.string(),
+      credits: z.number().int(),
+      teacher_names: z.array(z.string()),
+      credit_manager: z.string(),
+      summary: z.string(),
+      goal: z.string(),
+      evaluation_items: z.array(
+        z.object({
+          title: z.string(),
+          point: z.number().int(),
+          way: z.string(),
+        }),
+      ),
+      cources: z.array(z.string()),
+      self_study: z.string(),
+      textbook: z.string(),
+      reference: z.string(),
+      evaluation_events: z.array(
+        z.object({ title: z.string(), point: z.number().int() }),
+      ),
+      evaluation_criterion: z.string(),
+      additional_information: z.string(),
+    }),
+  ),
+});

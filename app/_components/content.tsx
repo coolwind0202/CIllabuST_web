@@ -2,16 +2,17 @@
 
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
-import { useFuse } from "../_hooks/use_fuse";
 //@ts-ignore
 import Highlighter from "react-highlight-words";
 import { useQueryState } from "nuqs";
+
+import { useFuse } from "../_hooks/use_fuse";
 import { Syllabus } from "../_types/syllabus";
 import { getCategoryText } from "../_properties/category";
 import { getRequisiteText } from "../_properties/requisute";
 
 export type Props = {
-  syllabus: Syllabus
+  syllabus: Syllabus;
 };
 
 export function Content({ syllabus }: Props) {
@@ -20,16 +21,20 @@ export function Content({ syllabus }: Props) {
     setWord(event.target.value);
   };
 
-  const { search } = useFuse(syllabus.subjects,
-    { keys: ["summary", "name", "cources", "goal"], threshold: 0.1, ignoreLocation: true, includeMatches: true });
+  const { search } = useFuse(syllabus.subjects, {
+    keys: ["summary", "name", "cources", "goal"],
+    threshold: 0.1,
+    ignoreLocation: true,
+    includeMatches: true,
+  });
   const searchResult = search(word ?? "");
 
   return (
     <div className="p-8 flex flex-col gap-6">
       <section>
         <Input
-          placeholder="例: 光エレクトロニクス"
           label="検索ワード"
+          placeholder="例: 光エレクトロニクス"
           value={word ?? ""}
           onChange={handleSearchChange}
         />
@@ -53,17 +58,25 @@ export function Content({ syllabus }: Props) {
                   matches.map((match, i) => (
                     <Highlighter
                       key={i}
-                      highlightStyle={{ backgroundColor: "darkslateblue", color: "white" }}
-                      textToHighlight={match.value}
+                      findChunks={() =>
+                        match.indices.map((range) => ({
+                          start: range[0],
+                          end: range[1] + 1,
+                        }))
+                      }
+                      highlightStyle={{
+                        backgroundColor: "darkslateblue",
+                        color: "white",
+                      }}
                       searchWords={[]}
-                      findChunks={() => match.indices.map(range => ({ start: range[0], end: range[1] + 1 }))} />
+                      textToHighlight={match.value}
+                    />
                   ))
                 }
               </p>
             </li>
-          )
-        })
-        }
+          );
+        })}
       </ul>
     </div>
   );
