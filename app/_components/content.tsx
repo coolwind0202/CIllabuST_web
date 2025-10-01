@@ -7,7 +7,8 @@ import { useFuse } from "../_hooks/use_fuse";
 import Highlighter from "react-highlight-words";
 import { useQueryState } from "nuqs";
 import { Syllabus } from "../_types/syllabus";
-import { getCategoryText } from "./category";
+import { getCategoryText } from "../_properties/category";
+import { getRequisiteText } from "../_properties/requisute";
 
 export type Props = {
   syllabus: Syllabus
@@ -42,7 +43,9 @@ export function Content({ syllabus }: Props) {
             <li key={`${subject.category}_${subject.name}`}>
               <div className="flex gap-3 mb-1">
                 <h1 className="font-bold text-2xl">{subject.name}</h1>
-                <Button radius="sm" size="sm" variant="bordered">{getCategoryText(subject.category)}</Button>
+                <Button size="sm">{getCategoryText(subject.category)}</Button>
+                <Button size="sm">{subject.school_year}年</Button>
+                <Button size="sm">{getRequisiteText(subject.requisite)}</Button>
               </div>
               <p className="text-gray-400">
                 {
