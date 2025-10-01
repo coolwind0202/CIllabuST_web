@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { wrap, Remote } from "comlink";
 
 import { Subject } from "../_types/syllabus";
@@ -34,13 +34,16 @@ export function useSearchWorker(subjects: Subject[]) {
     };
   }, [subjects]);
 
-  const search = async (query: SearchQuery): Promise<SearchResult[]> => {
-    if (!workerApiRef.current) {
-      return [];
-    }
+  const search = useCallback(
+    async (query: SearchQuery): Promise<SearchResult[]> => {
+      if (!workerApiRef.current) {
+        return [];
+      }
 
-    return workerApiRef.current.search(query);
-  };
+      return workerApiRef.current.search(query);
+    },
+    [],
+  );
 
   return { search };
 }
