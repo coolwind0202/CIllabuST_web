@@ -42,11 +42,7 @@ export function Content({ syllabus }: Props) {
           onChange={handleSearchChange}
         />
       </section>
-      {isPending ? (
-        <div>検索中...</div>
-      ) : (
-        <SubjectList searchResults={searchResults} />
-      )}
+      <SubjectList searchResults={searchResults} />
     </div>
   );
 }
