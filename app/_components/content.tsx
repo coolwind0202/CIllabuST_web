@@ -59,7 +59,7 @@ export function Content({ syllabus }: Props) {
       <section>
         <Input
           placeholder="例: 光エレクトロニクス"
-          label="検索ワード"
+          label="全文検索ワード"
           value={fulltextWord ?? ""}
           onChange={handleFullTextWordChange}
         />
