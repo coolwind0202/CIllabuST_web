@@ -2,37 +2,101 @@
 
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
+import { Checkbox, CheckboxGroup } from "@heroui/checkbox"
+import { Divider } from "@heroui/divider"
 import { useFuse } from "../_hooks/use_fuse";
 //@ts-ignore
 import Highlighter from "react-highlight-words";
-import { useQueryState } from "nuqs";
-import { Syllabus } from "../_types/syllabus";
+import { parseAsArrayOf, parseAsNumberLiteral, parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+import { Syllabus } from "../syllabus";
 import { getCategoryText } from "../_properties/category";
 import { getRequisiteText } from "../_properties/requisute";
+import React from "react";
+import z from "zod";
 
 export type Props = {
-  syllabus: Syllabus
+  syllabus: z.infer<typeof Syllabus>
 };
 
 export function Content({ syllabus }: Props) {
-  const [word, setWord] = useQueryState("word");
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setWord(event.target.value);
+  const [fulltextWord, setFullTextWord] = useQueryState("fulltext_word", parseAsString.withDefault(""));
+  const handleFullTextWordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFullTextWord(event.target.value);
   };
 
-  const { search } = useFuse(syllabus.subjects,
+  const subjectSchema = Syllabus.shape.subjects.element;
+  const categorySchema = subjectSchema.shape.category;
+  const requisiteSchema = subjectSchema.shape.requisite;
+
+  const [categories, setCategories] = useQueryState("categories", parseAsArrayOf(parseAsStringEnum(categorySchema.options)).withDefault(categorySchema.options));
+  const handleCategoryChange = (values: string[]) => {
+    const choices = values.map(value => categorySchema.safeParse(value)).map(result => result.data).filter((data): data is z.infer<typeof categorySchema> => data != undefined);
+    setCategories(choices);
+  }
+
+  const validSchoolYears = [1, 2, 3, 4];
+  const [schoolYears, setSchoolYears] = useQueryState("school_years", parseAsArrayOf(parseAsNumberLiteral(validSchoolYears)).withDefault(validSchoolYears));
+  const handleSchoolYearsChange = (values: string[]) => {
+    const choices = values.map(value => parseInt(value)).filter(year => validSchoolYears.includes(year));
+    setSchoolYears(choices);
+  }
+
+  const [requisites, setRequisites] = useQueryState("requisites", parseAsArrayOf(parseAsStringEnum(requisiteSchema.options)).withDefault(requisiteSchema.options));
+  const handleRequisitesChange = (values: string[]) => {
+    const choices = values.map(value => requisiteSchema.safeParse(value)).map(result => result.data).filter((data): data is z.infer<typeof requisiteSchema> => data != undefined);
+    setRequisites(choices);
+  }
+
+  const { fulltextSearch } = useFuse(syllabus.subjects,
     { keys: ["summary", "name", "cources", "goal"], threshold: 0.1, ignoreLocation: true, includeMatches: true });
-  const searchResult = search(word ?? "");
+  const searchResult = fulltextSearch(fulltextWord)
+    .filter(entry => categories.includes(entry.item.category))
+    .filter(entry => schoolYears.includes(entry.item.school_year))
+    .filter(entry => requisites.includes(entry.item.requisite));
 
   return (
     <div className="p-8 flex flex-col gap-6">
       <section>
         <Input
           placeholder="例: 光エレクトロニクス"
-          label="検索ワード"
-          value={word ?? ""}
-          onChange={handleSearchChange}
+          label="全文検索ワード"
+          value={fulltextWord ?? ""}
+          onChange={handleFullTextWordChange}
         />
+        <Divider className="my-4" />
+        <CheckboxGroup
+          value={categories}
+          orientation="horizontal"
+          label="カテゴリ"
+          onValueChange={handleCategoryChange}
+          >
+          {
+            categorySchema.options.map(option => <Checkbox value={option} key={option}>{getCategoryText(option)}</Checkbox>)
+          }
+        </CheckboxGroup>
+        <Divider className="my-4" />
+        <CheckboxGroup
+          value={schoolYears.map(year => year.toString())}
+          orientation="horizontal"
+          label="学年"
+          onValueChange={handleSchoolYearsChange}
+          >
+          {
+            validSchoolYears.map(year => <Checkbox value={year.toString()} key={year}>{year}</Checkbox>)
+          }
+        </CheckboxGroup>
+        <Divider className="my-4" />
+        <CheckboxGroup
+          value={requisites}
+          orientation="horizontal"
+          label="必修・選択"
+          onValueChange={handleRequisitesChange}
+          >
+          {
+            requisiteSchema.options.map(option => <Checkbox value={option} key={option}>{getRequisiteText(option)}</Checkbox>)
+          }
+        </CheckboxGroup>
+        <Divider className="my-4" />
       </section>
       <ul className="flex flex-col gap-6">
         {searchResult.map((entry) => {
