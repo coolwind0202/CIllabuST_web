@@ -16,6 +16,7 @@
 		"@heroui/badge": "2.2.16",
 		"@heroui/button": "2.2.26",
 		"@heroui/card": "2.2.24",
+		"@heroui/checkbox": "^2.3.29",
 		"@heroui/chip": "2.2.21",
 		"@heroui/code": "2.2.20",
 		"@heroui/divider": "2.2.19",
@@ -57,11 +58,11 @@
 		"intl-messageformat": "10.7.16",
 		"next": "15.3.1",
 		"next-themes": "0.4.6",
-		"nuqs": "^2.6.0",
+		"nuqs": "^2.8.6",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"react-highlight-words": "^0.21.0",
-		"zod": "^4.1.11"
+		"zod": "^4.2.1"
 	},
 	"devDependencies": {
 		"@next/eslint-plugin-next": "15.3.4",
@@ -84,7 +85,7 @@
 		"eslint-plugin-unused-imports": "4.1.4",
 		"globals": "16.0.0",
 		"json-refs": "^3.0.15",
-		"json-schema-to-zod": "^2.6.1",
+		"json-schema-to-zod": "^2.7.0",
 		"postcss": "8.5.6",
 		"prettier": "3.5.3",
 		"tailwind-variants": "3.1.1",
