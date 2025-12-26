@@ -19,7 +19,7 @@ export type Props = {
 };
 
 export function Content({ syllabus }: Props) {
-  const [fulltextWord, setFullTextWord] = useQueryState("word", parseAsString.withDefault(""));
+  const [fulltextWord, setFullTextWord] = useQueryState("fulltext_word", parseAsString.withDefault(""));
   const handleFullTextWordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFullTextWord(event.target.value);
   };
