@@ -58,7 +58,7 @@ export function Content({ syllabus }: Props) {
     <div className="p-8 flex flex-col gap-6">
       <section>
         <Input
-          placeholder="例: 光エレクトロニクス"
+          placeholder="例: AI"
           label="全文検索ワード"
           value={fulltextWord ?? ""}
           onChange={handleFullTextWordChange}
@@ -101,7 +101,7 @@ export function Content({ syllabus }: Props) {
       <ul className="flex flex-col gap-6">
         {searchResult.map((entry) => {
           const subject = entry.item;
-          const matches = entry.matches ?? [];
+          const matches = entry.fuseResultEntry?.matches ?? [];
 
           return (
             <li key={`${subject.category}_${subject.name}`}>
